@@ -1,0 +1,1122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Star/Lab - Research-Grade Peptides</title>
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: #090e22;
+      --panel-soft: rgba(10, 15, 36, 0.82);
+      --line: rgba(116, 136, 226, 0.14);
+      --line-strong: rgba(111, 126, 237, 0.24);
+      --muted: #93a3c5;
+      --text: #f5f8ff;
+      --blue: #636cff;
+      --blue-2: #7580ff;
+      --yellow: #f5ba25;
+      --mono: "JetBrains Mono", "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at 84% 9%, rgba(91, 95, 217, 0.32), transparent 25rem),
+        radial-gradient(circle at 0% 72%, rgba(65, 70, 186, 0.16), transparent 30rem),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(122, 144, 229, 0.095) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122, 144, 229, 0.095) 1px, transparent 1px);
+      background-size: 96px 96px;
+      background-position: 0 30px;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(5, 8, 22, 0.04), rgba(5, 8, 22, 0.78) 86%),
+        linear-gradient(90deg, rgba(5, 8, 22, 0.38), transparent 36%, rgba(5, 8, 22, 0.24));
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .warning {
+      height: 30px;
+      display: grid;
+      place-items: center;
+      background: var(--yellow);
+      color: #070915;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .warning svg {
+      width: 11px;
+      height: 11px;
+      margin-right: 8px;
+      vertical-align: -2px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      height: 65px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(4, 7, 19, 0.88);
+      backdrop-filter: blur(18px);
+    }
+
+    .container {
+      width: min(1104px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .header-inner {
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 232px;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 214px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    .main-nav {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .main-nav ul {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .main-nav a,
+    .header-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      padding: 0 15px;
+      border: 1px solid transparent;
+      color: #a6b0cf;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .main-nav a:hover,
+    .main-nav a.is-active {
+      color: #dce3ff;
+      border-color: rgba(92, 105, 222, 0.12);
+      background: rgba(59, 73, 176, 0.13);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 290px;
+      justify-content: flex-end;
+    }
+
+    .header-actions a {
+      border-color: rgba(105, 121, 223, 0.24);
+      color: #e9edff;
+      padding-inline: 14px;
+    }
+
+    .header-actions a.primary-outline {
+      min-width: 169px;
+      color: #8992ff;
+      border-color: rgba(99, 108, 255, 0.52);
+    }
+
+    .discord-icon {
+      width: 14px;
+      height: 14px;
+      margin-right: 7px;
+      fill: currentColor;
+    }
+
+    .hero {
+      min-height: calc(100vh - 30px);
+      padding: 130px 0 54px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 432px;
+      gap: 78px;
+      align-items: start;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      height: 27px;
+      padding: 0 11px;
+      border: 1px solid var(--line-strong);
+      border-radius: 2px;
+      background: rgba(15, 22, 52, 0.72);
+      color: #abc0ff;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      margin-right: 9px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 13px rgba(99, 108, 255, 0.75);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--mono);
+      letter-spacing: 0;
+    }
+
+    .hero h1 {
+      max-width: 650px;
+      margin-top: 27px;
+      font-size: 73px;
+      line-height: 1.02;
+      font-weight: 900;
+      color: #f3f6ff;
+    }
+
+    .accent {
+      color: var(--blue);
+    }
+
+    .hero-copy {
+      max-width: 615px;
+      margin: 20px 0 0;
+      color: #aabbe6;
+      font-size: 20px;
+      line-height: 1.43;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-copy em {
+      color: #d7e0ff;
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 262px;
+      height: 40px;
+      padding: 0 23px;
+      border: 1px solid rgba(107, 119, 255, 0.62);
+      border-radius: 3px;
+      background: #6470ff;
+      color: white;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      box-shadow: 0 16px 42px rgba(73, 83, 255, 0.16);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .button.secondary {
+      min-width: 208px;
+      background: rgba(5, 8, 22, 0.32);
+      border-color: rgba(135, 149, 233, 0.18);
+      box-shadow: none;
+      color: white;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(132, 142, 255, 0.95);
+      background: #737dff;
+      box-shadow: 0 18px 52px rgba(99, 108, 255, 0.26);
+    }
+
+    .button.secondary:hover {
+      background: rgba(99, 108, 255, 0.12);
+    }
+
+    .sales-note {
+      margin-top: 12px;
+      color: #8ea3d5;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .hero-stats {
+      width: 512px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      margin-top: 47px;
+      padding-top: 35px;
+      border-top: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      color: #ffffff;
+      font-family: var(--mono);
+      font-size: 25px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 9px;
+      color: #9eb3e7;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .coa-card {
+      margin-top: 70px;
+      min-height: 448px;
+      border: 1px solid rgba(112, 126, 227, 0.24);
+      border-radius: 4px;
+      background: rgba(8, 12, 31, 0.84);
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .coa-inner {
+      padding: 26px 24px 23px;
+    }
+
+    .coa-top {
+      display: flex;
+      justify-content: space-between;
+      color: #8590b0;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+    }
+
+    .coa-top .certified {
+      color: #7d85ff;
+    }
+
+    .coa-top .certified::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      margin-right: 9px;
+      border-radius: 50%;
+      background: var(--blue);
+      vertical-align: 1px;
+    }
+
+    .coa-table {
+      margin-top: 23px;
+      border-top: 1px solid rgba(117, 132, 222, 0.11);
+    }
+
+    .coa-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      min-height: 37px;
+      align-items: center;
+      border-bottom: 1px solid rgba(117, 132, 222, 0.11);
+      color: #dfe5ff;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .coa-row span:first-child {
+      color: #828da9;
+      font-weight: 700;
+    }
+
+    .trace {
+      margin-top: 36px;
+    }
+
+    .trace svg {
+      display: block;
+      width: 100%;
+      height: 112px;
+    }
+
+    .trace-line {
+      fill: none;
+      stroke: #6570ff;
+      stroke-width: 2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .trace-base {
+      stroke: rgba(102, 116, 210, 0.23);
+      stroke-width: 1;
+    }
+
+    .trace-foot {
+      display: flex;
+      justify-content: space-between;
+      color: #7985aa;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .proof {
+      padding: 82px 0 80px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: 410px 1fr;
+      gap: 66px;
+      align-items: start;
+    }
+
+    .proof h2 {
+      margin-top: 18px;
+      font-size: 38px;
+      line-height: 1.2;
+      font-weight: 900;
+    }
+
+    .proof-copy {
+      margin: 2px 0 26px;
+      color: #f8fbff;
+      font-size: 19px;
+      line-height: 1.47;
+      font-weight: 800;
+    }
+
+    .proof-copy .accent {
+      font-weight: 900;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .mini-card {
+      min-height: 73px;
+      padding: 16px 13px 12px;
+      border: 1px solid rgba(116, 132, 222, 0.15);
+      background: rgba(7, 11, 29, 0.58);
+    }
+
+    .mini-card strong {
+      display: block;
+      font-family: var(--mono);
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .mini-card span {
+      display: block;
+      margin-top: 9px;
+      color: #9eb3e7;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .catalogue {
+      padding: 81px 0 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h2 {
+      margin-top: 15px;
+      font-size: 38px;
+      line-height: 1.08;
+      font-weight: 900;
+    }
+
+    .section-head p {
+      max-width: 590px;
+      margin: 12px 0 0;
+      color: #9fb1dd;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .view-all {
+      margin-bottom: 4px;
+      color: #6974ff;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .product-card {
+      min-height: 302px;
+      padding: 21px 20px;
+      border: 1px solid rgba(111, 128, 225, 0.17);
+      border-radius: 4px;
+      background: rgba(10, 16, 39, 0.82);
+      overflow: hidden;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .product-link {
+      display: block;
+      color: inherit;
+    }
+
+    .product-card:hover {
+      border-color: rgba(99, 108, 255, 0.78);
+      background: rgba(12, 19, 48, 0.95);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(99, 108, 255, 0.1) inset;
+      transform: translateY(-4px);
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #9cb0de;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+    }
+
+    .pill {
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      border: 1px solid rgba(117, 132, 222, 0.17);
+      border-radius: 2px;
+      color: #9caaff;
+    }
+
+    .product-card h3 {
+      margin-top: 18px;
+      font-size: 20px;
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .product-card p {
+      min-height: 56px;
+      margin: 8px 0 20px;
+      color: #a9b9df;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .specs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 18px;
+      padding-top: 17px;
+      border-top: 1px solid rgba(117, 132, 222, 0.12);
+    }
+
+    .spec span {
+      display: block;
+      color: #737e9f;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .spec strong {
+      display: block;
+      margin-top: 7px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .discord-panel {
+      margin-top: 98px;
+      min-height: 353px;
+      padding: 0 64px;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(104, 115, 255, 0.42);
+      border-radius: 5px;
+      background:
+        radial-gradient(circle at 86% 10%, rgba(95, 105, 255, 0.43), transparent 18rem),
+        linear-gradient(90deg, rgba(7, 11, 29, 0.98), rgba(10, 14, 36, 0.92) 62%, rgba(41, 48, 126, 0.86));
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.2);
+    }
+
+    .discord-content {
+      max-width: 610px;
+    }
+
+    .slash {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 12px;
+      border: 1px solid rgba(110, 124, 225, 0.2);
+      border-radius: 2px;
+      color: #92a4d5;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .discord-panel h2 {
+      margin-top: 17px;
+      max-width: 575px;
+      font-size: 48px;
+      line-height: 1.02;
+      font-weight: 900;
+    }
+
+    .discord-panel p {
+      max-width: 590px;
+      margin: 19px 0 0;
+      color: #a8b8df;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .discord-panel .btn-row {
+      margin-top: 33px;
+    }
+
+    .discord-panel .button {
+      min-width: 286px;
+    }
+
+    .footer {
+      margin-top: 249px;
+      border-top: 1px solid transparent;
+    }
+
+    .footer-main {
+      display: grid;
+      grid-template-columns: 1.2fr 0.45fr 0.8fr;
+      gap: 126px;
+      padding-bottom: 60px;
+    }
+
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .footer p {
+      max-width: 305px;
+      margin: 18px 0 0;
+      color: #9eb0dc;
+      font-size: 15px;
+      line-height: 1.38;
+    }
+
+    .footer-warning {
+      margin-top: 18px;
+      color: var(--yellow);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .footer h4 {
+      margin: 0 0 20px;
+      color: #7d8bad;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: #f4f7ff;
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .footer-links.legal a {
+      color: #9eb0dc;
+      font-weight: 500;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-bottom .container {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #8292bd;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 980px) {
+      .container {
+        width: min(100% - 32px, 720px);
+      }
+
+      .header-inner {
+        gap: 16px;
+      }
+
+      .main-nav {
+        display: none;
+      }
+
+      .header-actions {
+        min-width: auto;
+      }
+
+      .header-actions .discord-link {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 82px;
+      }
+
+      .hero-grid,
+      .proof-grid,
+      .section-head,
+      .footer-main {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 52px;
+      }
+
+      .hero-stats {
+        width: 100%;
+      }
+
+      .coa-card {
+        margin-top: 22px;
+      }
+
+      .proof-grid,
+      .footer-main {
+        gap: 34px;
+      }
+
+      .product-grid,
+      .mini-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .discord-panel {
+        padding: 46px 32px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .warning {
+        justify-content: start;
+        padding-inline: 16px;
+        overflow: hidden;
+      }
+
+      .site-header,
+      .header-inner {
+        height: 62px;
+      }
+
+      .brand {
+        min-width: auto;
+      }
+
+      .brand-logo {
+        width: 158px;
+        height: 27px;
+      }
+
+      .header-actions .primary-outline {
+        min-width: auto;
+        padding-inline: 12px;
+      }
+
+      .hero h1,
+      .discord-panel h2 {
+        font-size: 39px;
+      }
+
+      .hero-copy {
+        font-size: 17px;
+      }
+
+      .btn-row {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button,
+      .discord-panel .button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .hero-stats,
+      .mini-stats,
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .proof h2,
+      .section-head h2 {
+        font-size: 32px;
+      }
+
+      .footer {
+        margin-top: 110px;
+      }
+
+      .footer-bottom .container {
+        height: auto;
+        padding-block: 18px;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="warning">
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.1 22 20H2L12 3.1Zm0 4.2L5.6 18h12.8L12 7.3Zm-1 3.5h2v4.6h-2v-4.6Zm0 5.6h2v2h-2v-2Z"/></svg>
+      Research use only / Non destiné à la consommation humaine ou animale
+    </span>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#index" class="brand" aria-label="Star Lab">
+        <img class="brand-logo" src="assets/star-lab-logo.png" alt="Star/Lab">
+      </a>
+
+      <nav class="main-nav" aria-label="Navigation principale">
+        <ul>
+          <li><a class="is-active" href="#index">Index</a></li>
+          <li><a href="catalogue.html">Catalogue</a></li>
+          <li><a href="#apropos">À propos</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a class="discord-link" href="https://discord.gg/NVHdPR3ZDx" target="_blank" rel="noopener">
+          <svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 7.2a15.8 15.8 0 0 0-3.9-1.2l-.2.4c1.4.4 2.1 1 2.1 1s-1.8-1-5.4-1-5.4 1-5.4 1 .7-.6 2.1-1L8.5 6a15.8 15.8 0 0 0-3.9 1.2C2.1 10.8 1.5 14.3 1.8 17.7c1.6 1.2 3.2 1.9 4.8 2.3l1-1.6c-.6-.2-1.1-.5-1.6-.8l.4-.3c3.1 1.5 8.1 1.5 11.2 0l.4.3c-.5.3-1 .6-1.6.8l1 1.6c1.6-.4 3.2-1.1 4.8-2.3.4-3.9-.6-7.4-2.7-10.5ZM8.7 15.5c-.9 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.7.9 1.7 1.9-.7 1.9-1.7 1.9Zm6.6 0c-.9 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.7.9 1.7 1.9-.7 1.9-1.7 1.9Z"/></svg>
+          Discord
+        </a>
+        <a class="primary-outline" href="catalogue.html">Voir catalogue →</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="index">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Catalogue 2026 · 66 références disponibles</span>
+          <h1 id="hero-title">Peptides de <span class="accent">recherche,</span><br>pureté &gt;99%.</h1>
+          <p class="hero-copy">Star Lab synthétise et distribue des peptides de qualité laboratoire destinés à la recherche scientifique <em>in vitro</em>. Chaque lot est livré avec son COA et son spectre HPLC.</p>
+          <div class="btn-row">
+            <a class="button" href="catalogue.html">Explorer le catalogue →</a>
+            <a class="button secondary" href="https://discord.gg/NVHdPR3ZDx" target="_blank" rel="noopener">Commander maintenant →</a>
+          </div>
+          <div class="sales-note">Réponse rapide · commande via Discord · expédition sous 24h</div>
+          <div class="hero-stats" aria-label="Statistiques Star Lab">
+            <div class="stat">
+              <strong>≥99%</strong>
+              <span>Pureté HPLC</span>
+            </div>
+            <div class="stat">
+              <strong>24h</strong>
+              <span>Expédition</span>
+            </div>
+            <div class="stat">
+              <strong>COA</strong>
+              <span>Inclus / lot</span>
+            </div>
+          </div>
+        </div>
+
+        <article class="coa-card" aria-label="Certificat d'analyse exemple">
+          <div class="coa-inner">
+            <div class="coa-top">
+              <span>Lot # HX-2026-04-A</span>
+              <span class="certified">Certified</span>
+            </div>
+            <div class="coa-table">
+              <div class="coa-row"><span>Compound</span><strong>BPC-157</strong></div>
+              <div class="coa-row"><span>Sequence</span><strong>GEPPPGKPADDAGLV</strong></div>
+              <div class="coa-row"><span>MW</span><strong>1419.53 g/mol</strong></div>
+              <div class="coa-row"><span>Purity (HPLC)</span><strong>99.42%</strong></div>
+              <div class="coa-row"><span>Endotoxins</span><strong>&lt; 0.5 EU/mg</strong></div>
+              <div class="coa-row"><span>Storage</span><strong>-20°C, lyophilized</strong></div>
+            </div>
+            <div class="trace">
+              <svg viewBox="0 0 384 112" role="img" aria-label="Trace HPLC">
+                <line class="trace-base" x1="0" y1="90" x2="384" y2="90"/>
+                <polyline class="trace-line" points="0,83 28,80 54,76 77,70 91,44 100,8 111,45 121,64 154,68 193,67 230,65 254,64 280,44 292,15 302,54 311,66 352,69 384,67"/>
+              </svg>
+              <div class="trace-foot">
+                <span>HPLC trace</span>
+                <span>TR 8.2 min</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="apropos" class="proof">
+      <div class="container proof-grid">
+        <div>
+          <span class="eyebrow">Simple · propre · efficace</span>
+          <h2>Des peptides <span class="accent">purs à 99%</span>, sans prix abusés.</h2>
+        </div>
+        <div>
+          <p class="proof-copy">Qualité laboratoire, tarifs honnêtes. <span class="accent">Expédition sous 24h</span>, livraison rapide partout en Europe sous 5 jours, et livraison à domicile sur Bruxelles et alentours. Basés en Belgique, nous voulons ouvrir le monde des peptides au plus grand nombre avec des prix justes.</p>
+          <div class="mini-stats">
+            <div class="mini-card"><strong>24h</strong><span>Expédition</span></div>
+            <div class="mini-card"><strong>5j</strong><span>Europe</span></div>
+            <div class="mini-card"><strong>BXL</strong><span>À domicile</span></div>
+            <div class="mini-card"><strong>99%</strong><span>Pureté</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogue" class="catalogue">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Best sellers Star/Lab</span>
+            <h2>Nos trois meilleurs peptides</h2>
+            <p>GHK-Cu, Retatrutide et Melanotan II — nos best sellers et les références les plus demandées du catalogue.</p>
+          </div>
+          <a class="view-all" href="catalogue.html">Voir tout (66) →</a>
+        </div>
+
+        <div class="product-grid">
+          <a class="product-link" href="catalogue.html">
+          <article class="product-card">
+            <div class="product-meta"><span>HX-009</span><span class="pill">Cosmetic</span></div>
+            <h3>GHK-Cu</h3>
+            <p>Tripeptide cuivrique étudié pour la remodelisation de la matrice extracellulaire.</p>
+            <div class="specs">
+              <div class="spec"><span>Pureté</span><strong>99.6%</strong></div>
+              <div class="spec"><span>Vial</span><strong>50 mg</strong></div>
+              <div class="spec"><span>CAS</span><strong>49557-75-7</strong></div>
+              <div class="spec"><span>MW</span><strong>340.38</strong></div>
+            </div>
+          </article>
+          </a>
+
+          <a class="product-link" href="catalogue.html">
+          <article class="product-card">
+            <div class="product-meta"><span>HX-011</span><span class="pill">Metabolic</span></div>
+            <h3>Retatrutide</h3>
+            <p>Triple agoniste GIP/GLP-1/glucagon de nouvelle génération étudié in vitro.</p>
+            <div class="specs">
+              <div class="spec"><span>Pureté</span><strong>99.4%</strong></div>
+              <div class="spec"><span>Vial</span><strong>10 mg</strong></div>
+              <div class="spec"><span>CAS</span><strong>2381089-83-2</strong></div>
+              <div class="spec"><span>MW</span><strong>4731.33</strong></div>
+            </div>
+          </article>
+          </a>
+
+          <a class="product-link" href="catalogue.html">
+          <article class="product-card">
+            <div class="product-meta"><span>HX-010</span><span class="pill">Cosmetic</span></div>
+            <h3>Melanotan II</h3>
+            <p>Analogue cyclique de α-MSH utilisé dans la recherche sur la mélanogenèse.</p>
+            <div class="specs">
+              <div class="spec"><span>Pureté</span><strong>99.1%</strong></div>
+              <div class="spec"><span>Vial</span><strong>10 mg</strong></div>
+              <div class="spec"><span>CAS</span><strong>121062-08-6</strong></div>
+              <div class="spec"><span>MW</span><strong>1024.18</strong></div>
+            </div>
+          </article>
+          </a>
+        </div>
+
+        <section id="discord" class="discord-panel" aria-labelledby="discord-title">
+          <div class="discord-content">
+            <span class="slash">/ Commander</span>
+            <h2 id="discord-title">Rejoignez le Discord Star Lab</h2>
+            <p>Toutes les commandes se passent directement sur notre serveur Discord. Rejoignez la communauté pour commander, demander un peptide custom ou obtenir des tarifs volume.</p>
+            <div class="btn-row">
+              <a class="button" href="https://discord.gg/NVHdPR3ZDx" target="_blank" rel="noopener">
+                <svg class="discord-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 7.2a15.8 15.8 0 0 0-3.9-1.2l-.2.4c1.4.4 2.1 1 2.1 1s-1.8-1-5.4-1-5.4 1-5.4 1 .7-.6 2.1-1L8.5 6a15.8 15.8 0 0 0-3.9 1.2C2.1 10.8 1.5 14.3 1.8 17.7c1.6 1.2 3.2 1.9 4.8 2.3l1-1.6c-.6-.2-1.1-.5-1.6-.8l.4-.3c3.1 1.5 8.1 1.5 11.2 0l.4.3c-.5.3-1 .6-1.6.8l1 1.6c1.6-.4 3.2-1.1 4.8-2.3.4-3.9-.6-7.4-2.7-10.5ZM8.7 15.5c-.9 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.7.9 1.7 1.9-.7 1.9-1.7 1.9Zm6.6 0c-.9 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.7.9 1.7 1.9-.7 1.9-1.7 1.9Z"/></svg>
+                Commander sur Discord →
+              </a>
+              <a class="button secondary" href="catalogue.html">Voir le catalogue</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact" class="footer">
+    <div class="container footer-main">
+      <div>
+        <div class="footer-logo">STAR/LAB</div>
+        <p>Peptides de qualité recherche, prix justes, commande rapide via Discord.</p>
+        <div class="footer-warning">△ For research use only — not for human consumption</div>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <div class="footer-links">
+          <a href="#apropos">À propos</a>
+          <a href="catalogue.html">Catalogue</a>
+        </div>
+      </div>
+      <div>
+        <h4>Légal</h4>
+        <div class="footer-links legal">
+          <a href="mentions-legales.html">Mentions légales</a>
+          <a href="mentions-legales.html">CGV</a>
+          <a href="mentions-legales.html">Disclaimer recherche</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <span>© 2026 Star/Lab — Tous droits réservés</span>
+        <span>Discord · Catalogue · HPLC ≥ 99%</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
